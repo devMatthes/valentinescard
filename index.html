@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>💝 Julka, mam do Ciebie pytanie... 💝</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="hearts-bg" id="hearts-bg"></div>
+
+    <!-- YouTube Audio Player (hidden) -->
+    <div id="youtube-player-container"
+        style="position: fixed; top: -1000px; left: -1000px; pointer-events: none; opacity: 0;">
+        <div id="youtube-player"></div>
+    </div>
+
+    <!-- Music Control Button -->
+    <button class="music-btn" id="musicBtn" title="Włącz/Wyłącz muzykę">
+        🔇
+    </button>
+
+    <!-- Screen 1: Intro -->
+    <section class="screen active" id="screen-intro">
+        <div class="content">
+            <h1 class="title-glow">Juleczko kochanie! 💕</h1>
+            <p class="subtitle">Mam do Ciebie bardzo ważne pytanie...</p>
+            <div class="photo-gallery">
+                <div class="photo-slider" id="photoSlider">
+                    <img src="uploaded_media_2_1770642255037.jpg" alt="My 1" class="gallery-photo active">
+                    <img src="uploaded_media_1_1770642255037.jpg" alt="My 2" class="gallery-photo">
+                    <img src="uploaded_media_0_1770642255037.jpg" alt="My 3" class="gallery-photo">
+                    <img src="uploaded_media_3_1770642255037.jpg" alt="My 4" class="gallery-photo">
+                    <img src="uploaded_media_4_1770642255037.jpg" alt="My 5" class="gallery-photo">
+                    <img src="photo6.jpg" alt="My 6" class="gallery-photo">
+                    <img src="photo7.jpg" alt="My 7" class="gallery-photo">
+                    <img src="photo8.jpg" alt="My 8" class="gallery-photo">
+                    <img src="photo9.jpg" alt="My 9" class="gallery-photo">
+                </div>
+                <div class="slider-dots" id="sliderDots"></div>
+            </div>
+            <button class="btn-main pulse hidden" id="nextBtn" onclick="showScreen('screen-question')">
+                <span>Dalej</span>
+                <span class="arrow">→</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Screen 2: The Question -->
+    <section class="screen" id="screen-question">
+        <div class="content">
+            <div class="hearts-rain" id="heartsRain"></div>
+            <h1 class="title-glow big-question">Julia...</h1>
+            <h2 class="question-text">Czy zostaniesz moją Walentynką? 💝</h2>
+
+            <form id="valentineForm" class="valentine-form">
+                <div class="form-options">
+                    <button type="button" class="btn-yes" onclick="sayYes()">
+                        <span class="heart-icon">💖</span>
+                        <span>TAK!</span>
+                        <span class="heart-icon">💖</span>
+                    </button>
+                    <button type="button" class="btn-no" id="noBtn">
+                        <span>Nie...</span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </section>
+
+    <!-- Screen 3: Celebration -->
+    <section class="screen" id="screen-celebration">
+        <div class="content celebration-content">
+            <div class="confetti-container" id="confetti"></div>
+            <div class="celebration-emojis">🎉💕🥳💝🎊💖✨</div>
+            <h1 class="title-glow celebration-title">TAAAAAAK!!!</h1>
+            <h2 class="celebration-subtitle">Wiedziałem, że powiesz TAK! 🥰</h2>
+
+            <div class="cringe-messages" id="cringeBox">
+                <p class="cringe-text"></p>
+            </div>
+
+            <div class="dancing-hearts">
+                <span>💃</span><span>❤️</span><span>🕺</span>
+            </div>
+
+            <button class="btn-main" onclick="showScreen('screen-flowers')">
+                <span>Czekaj, jest coś jeszcze...</span>
+                <span class="arrow">→</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Screen 4: Flowers Confirmation -->
+    <section class="screen" id="screen-flowers">
+        <div class="content">
+            <h1 class="title-glow">💐 Ale to nie wszystko! 💐</h1>
+            <p class="flower-text">
+                Czy potwierdzasz odbiór<br>
+                <strong>pięknego bukietu kwiatów</strong><br>
+                od Twojego ukochanego? 🌹
+            </p>
+
+            <form id="flowersForm" class="flowers-form">
+                <input type="hidden" name="valentine_response" value="TAK">
+                <input type="hidden" name="timestamp" id="timestamp">
+
+                <div class="form-options">
+                    <button type="button" class="btn-yes" onclick="confirmFlowers()">
+                        <span>🌸</span>
+                        <span>Potwierdzam odbiór!</span>
+                        <span>🌸</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Screen 5: Final -->
+    <section class="screen" id="screen-final">
+        <div class="content">
+            <div class="final-hearts">💕💕💕</div>
+            <h1 class="title-glow">Kocham Cię, Juleczka!</h1>
+            <p class="final-text">
+                Dziękuję, że jesteś moją Walentynką! 💝<br><br>
+                Jesteś najcudowniejszą osobą na świecie<br>
+                i jestem najszczęśliwszym człowiekiem,<br>
+                że mogę być z Tobą! ❤️
+            </p>
+            <div class="signature">
+                ~ Twój zakochany 💘
+            </div>
+            <div class="final-gallery">
+                <img src="uploaded_media_1_1770642255037.jpg" alt="My" class="final-photo">
+            </div>
+        </div>
+    </section>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
