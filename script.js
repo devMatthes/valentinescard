@@ -22,7 +22,7 @@ const cringeMessages = [
    ========================================== */
 
 let player;
-let musicPlaying = false;
+
 
 // YouTube IFrame API callback - called automatically when API loads
 function onYouTubeIframeAPIReady() {
@@ -48,16 +48,13 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
+const musicPlaying = true; // Always true now
+
 function onPlayerReady(event) {
     console.log('YouTube player ready!');
-    // Start playing immediately
+    // Start playing immediately and set volume
+    event.target.setVolume(100);
     event.target.playVideo();
-    musicPlaying = true;
-    const musicBtn = document.getElementById('musicBtn');
-    if (musicBtn) {
-        musicBtn.textContent = '🎵';
-        musicBtn.classList.add('playing');
-    }
 }
 
 function onPlayerStateChange(event) {
@@ -75,10 +72,23 @@ let cringeIndex = 0;
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
     createFloatingHearts();
-    initPhotoSlider();
+    // initPhotoSlider();  <-- Moved to startValentine()
     initNoButton();
-    initMusicButton();
 });
+
+function startValentine() {
+    const overlay = document.getElementById('start-overlay');
+    overlay.classList.add('hidden');
+
+    // Play music
+    if (player && player.playVideo) {
+        player.playVideo();
+        player.setVolume(100);
+    }
+
+    // Start photo slider
+    initPhotoSlider();
+}
 
 // ==========================================
 // FLOATING HEARTS BACKGROUND
@@ -298,38 +308,32 @@ function startCringeMessages() {
 // ==========================================
 // FLOWERS CONFIRMATION
 // ==========================================
-async function confirmFlowers() {
-    const btn = document.querySelector('.flowers-form .btn-yes');
+// ==========================================
+// FLOWERS CONFIRMATION
+// ==========================================
+async function handleFlowerSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const btn = form.querySelector('button');
     btn.classList.add('loading');
     btn.disabled = true;
 
-    // Set timestamp
-    document.getElementById('timestamp').value = new Date().toISOString();
-
-    // Prepare form data
-    const formData = {
-        valentine_response: 'TAK! 💕',
-        flowers_confirmed: 'POTWIERDZAM odbiór bukietu! 💐',
-        timestamp: new Date().toLocaleString('pl-PL'),
-        message: 'Julia powiedziała TAK i potwierdziła odbiór kwiatów! 🎉💝'
-    };
-
     try {
-        // Try to send via Formspree
-        const response = await fetch('https://formspree.io/f/xpwzgqvq', {
-            method: 'POST',
+        const response = await fetch(form.action, {
+            method: form.method,
+            body: new FormData(form),
             headers: {
-                'Content-Type': 'application/json',
                 'Accept': 'application/json'
-            },
-            body: JSON.stringify(formData)
+            }
         });
 
-        if (!response.ok) {
-            console.log('Formspree response not ok, but continuing...');
+        if (response.ok) {
+            console.log('Email sent successfully!');
+        } else {
+            console.log('Email sending failed, but continuing anyway...');
         }
     } catch (error) {
-        console.log('Email sending skipped (configure Formspree for real emails)');
+        console.log('Network error, continuing anyway...');
     }
 
     // Always show final screen
@@ -340,41 +344,21 @@ async function confirmFlowers() {
 // ==========================================
 // MUSIC CONTROL (YouTube)
 // ==========================================
-function initMusicButton() {
-    const musicBtn = document.getElementById('musicBtn');
+// ==========================================
+// MUSIC CONTROL (YouTube)
+// ==========================================
+// Button logic removed - Autoplay only
 
-    musicBtn.addEventListener('click', () => {
-        if (!player) {
-            console.log('YouTube player not ready yet');
-            return;
-        }
-
-        if (musicPlaying) {
-            player.pauseVideo();
-            musicBtn.textContent = '🔇';
-            musicBtn.classList.remove('playing');
-        } else {
+// Try to autoplay when user first interacts with the page (backup for browser blockers)
+document.body.addEventListener('click', () => {
+    if (player && player.getPlayerState) {
+        try {
             player.playVideo();
-            musicBtn.textContent = '🎵';
-            musicBtn.classList.add('playing');
+        } catch (e) {
+            console.log('Could not autoplay music');
         }
-        musicPlaying = !musicPlaying;
-    });
-
-    // Try to autoplay when user first interacts with the page
-    document.body.addEventListener('click', () => {
-        if (!musicPlaying && player && player.getPlayerState) {
-            try {
-                player.playVideo();
-                musicBtn.textContent = '🎵';
-                musicBtn.classList.add('playing');
-                musicPlaying = true;
-            } catch (e) {
-                console.log('Could not autoplay music');
-            }
-        }
-    }, { once: true });
-}
+    }
+}, { once: true });
 
 // ==========================================
 // HEARTS RAIN (for question screen)

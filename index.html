@@ -23,10 +23,14 @@
         <div id="youtube-player"></div>
     </div>
 
-    <!-- Music Control Button -->
-    <button class="music-btn" id="musicBtn" title="Włącz/Wyłącz muzykę">
-        🔇
-    </button>
+    <!-- Start Overlay -->
+    <div id="start-overlay" class="start-overlay">
+        <button class="btn-main pulse" onclick="startValentine()">
+            <span>Otwórz Walentynkę 💝</span>
+        </button>
+    </div>
+
+    <!-- Music Control Button Removed -->
 
     <!-- Screen 1: Intro -->
     <section class="screen active" id="screen-intro">
@@ -110,12 +114,12 @@
                 od Twojego ukochanego? 🌹
             </p>
 
-            <form id="flowersForm" class="flowers-form">
-                <input type="hidden" name="valentine_response" value="TAK">
-                <input type="hidden" name="timestamp" id="timestamp">
+            <form id="flowersForm" class="flowers-form" action="https://formspree.io/f/xpqjwlqo" method="POST"
+                onsubmit="handleFlowerSubmit(event)">
+                <input type="hidden" name="message" value="JULA ODPOWIEDZIAŁA TAK I POTWIERDZA ODBIÓR KWIATÓW! 💐">
 
                 <div class="form-options">
-                    <button type="button" class="btn-yes" onclick="confirmFlowers()">
+                    <button type="submit" class="btn-yes">
                         <span>🌸</span>
                         <span>Potwierdzam odbiór!</span>
                         <span>🌸</span>
